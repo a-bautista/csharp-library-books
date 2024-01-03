@@ -2,7 +2,7 @@ using System.Linq;
 using MyLibrary.Entities;
 namespace MyLibrary.Repository {
 
-    public class BookRepository 
+    public class BookRepository: IBookRepository 
     {
         private readonly List<Book> books = new()
         {

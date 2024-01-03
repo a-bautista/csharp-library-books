@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MyLibrary.DTO;
 using MyLibrary.Entities;
 using MyLibrary.Repository;
 
@@ -8,18 +9,21 @@ namespace MyLibrary.Controllers
     [Route("books")] // Get books
     public class BooksController : ControllerBase
     {
-        private readonly BookRepository repository;
+        private readonly IBookRepository repository;
 
-        public BooksController() {
-            repository = new BookRepository();
+        public BooksController(IBookRepository repository) {
+            this.repository = repository;
         }
 
         [HttpGet] // Get /books
-        public IEnumerable<Book> GetBooks(){
-            var books = repository.GetBooks();
+        public IEnumerable<BookDTO> GetBooks(){
+            var books = repository.GetBooks().Select(book => new BookDTO{
+                Id = book.Id,
+                Name = book.Name,
+                Author = book.Author
+            });
             return books;
         }
-
 
         // Get /book/{id}
         [HttpGet("{id}")]
