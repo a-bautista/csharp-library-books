@@ -17,22 +17,18 @@ namespace MyLibrary.Controllers
 
         [HttpGet] // Get /books
         public IEnumerable<BookDTO> GetBooks(){
-            var books = repository.GetBooks().Select(book => new BookDTO{
-                Id = book.Id,
-                Name = book.Name,
-                Author = book.Author
-            });
+            var books = repository.GetBooks().Select(book => book.AsDto());
             return books;
         }
 
         // Get /book/{id}
         [HttpGet("{id}")]
-        public ActionResult<Book> GetBook(Guid id){
-            var item = repository.GetBook(id);
-            if (item is null){
+        public ActionResult<BookDTO> GetBook(Guid id){
+            var book = repository.GetBook(id);
+            if (book is null){
                 return NotFound(); // You need to use ActionResult to return an item type
             }
-            return item;
+            return book.AsDto();
         }
     }
 }
