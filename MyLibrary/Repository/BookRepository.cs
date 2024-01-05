@@ -25,5 +25,10 @@ namespace MyLibrary.Repository {
             var index = books.FindIndex(existingBook => existingBook.Id == book.Id);
             books[index] = book;
         }
+        
+        public void DeleteBook(Book book){
+            var index = books.FindIndex(existingBook => existingBook.Id == book.Id);
+            books.RemoveAt(index);
+        }
     }
 }

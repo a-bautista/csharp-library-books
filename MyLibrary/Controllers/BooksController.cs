@@ -59,5 +59,16 @@ namespace MyLibrary.Controllers
             repository.UpdateBook(updatedBook);
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult<BookDTO> DeleteBook(Guid id){
+            var existingBook = repository.GetBook(id);
+            
+            if (existingBook is null){
+                return NotFound();
+            }
+            repository.DeleteBook(existingBook);
+            return NoContent();
+        }
     }
 }
