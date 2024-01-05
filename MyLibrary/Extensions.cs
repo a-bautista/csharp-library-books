@@ -10,7 +10,9 @@ namespace MyLibrary {
             {
                 Id = book.Id,
                 Name = book.Name,
-                Author = book.Author
+                Author = book.Author,
+                Rating = book.Rating,
+                CreatedDate = book.CreatedDate
             };
         }
     }

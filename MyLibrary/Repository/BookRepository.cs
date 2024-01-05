@@ -2,7 +2,7 @@ using System.Linq;
 using MyLibrary.Entities;
 namespace MyLibrary.Repository {
 
-    public class BookRepository: IBookRepository 
+    public class BookRepository: IBookRepository // BookRepository implements the interface
     {
         private readonly List<Book> books = new()
         {
@@ -16,6 +16,14 @@ namespace MyLibrary.Repository {
 
         public Book GetBook(Guid id){
             return books.Where(books => books.Id == id).SingleOrDefault();
+        }
+        public void CreateBook(Book book){
+            books.Add(book);
+        }
+
+        public void UpdateBook(Book book){
+            var index = books.FindIndex(existingBook => existingBook.Id == book.Id);
+            books[index] = book;
         }
     }
 }

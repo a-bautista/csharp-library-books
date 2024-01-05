@@ -9,9 +9,9 @@ namespace MyLibrary.Controllers
     [Route("books")] // Get books
     public class BooksController : ControllerBase
     {
-        private readonly IBookRepository repository;
+        private readonly IBookRepository repository; 
 
-        public BooksController(IBookRepository repository) {
+        public BooksController(IBookRepository repository) { // this class depends on the interface (dependency injection)
             this.repository = repository;
         }
 
@@ -29,6 +29,35 @@ namespace MyLibrary.Controllers
                 return NotFound(); // You need to use ActionResult to return an item type
             }
             return book.AsDto();
+        }
+
+        [HttpPost]
+        public ActionResult<BookDTO> CreateBook(CreateBookDTO bookDTO){
+            Book book = new ()
+            {
+                Id = Guid.NewGuid(),
+                Name = bookDTO.Name,
+                Author = bookDTO.Author,
+                Rating = bookDTO.Rating,
+                CreatedDate = DateTimeOffset.UtcNow
+            };
+            repository.CreateBook(book);
+            return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book.AsDto());
+        }
+
+        [HttpPut]
+        public ActionResult<BookDTO> UpdateBook(Guid id, UpdateBookDTO bookDTO){
+            var existingBook = repository.GetBook(id);
+            if (existingBook is null){
+                return NotFound();
+            }
+            Book updatedBook = existingBook with {
+                Name = bookDTO.Name,
+                Author = bookDTO.Author,
+                Rating = bookDTO.Rating
+            };
+            repository.UpdateBook(updatedBook);
+            return NoContent();
         }
     }
 }
