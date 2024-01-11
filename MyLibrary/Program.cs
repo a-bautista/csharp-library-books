@@ -1,4 +1,11 @@
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
+using MyLibrary.Repositories;
 using MyLibrary.Repository;
+using MyLibrary.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +16,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IBookRepository, BookRepository>();
+
+BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String)); // necessary for mongodb id 
+BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String)); // necessary for created date mongo
+
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
+builder.Services.AddSingleton<IMongoClient>(serviceProvider =>  
+{
+    var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    return new MongoClient(settings.ConnectionString);
+});
+builder.Services.AddSingleton<IBookRepository, MongoDbItemsRepository>();
 
 var app = builder.Build();
 
