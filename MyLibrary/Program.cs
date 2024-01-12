@@ -1,3 +1,6 @@
+using System.Net.Mime;
+using System.Text.Json;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -31,7 +34,11 @@ builder.Services.AddControllers(options =>
 {
     options.SuppressAsyncSuffixInActionNames = false;
 }); // helps to solve the problem for async in GetItemasync
-
+builder.Services.AddHealthChecks()
+    .AddMongoDb(
+        settings => settings.GetRequiredService<IOptions<MongoDbSettings>>().Value.ConnectionString,
+        name: "mongodb", timeout: TimeSpan.FromSeconds(3),
+        tags: new[]{"ready"});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,11 +48,21 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
-app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions{
+        Predicate = (check) => check.Tags.Contains("ready"), // make sure the db is actually working
+    }); 
+    
+    endpoints.MapHealthChecks("/health/live", new HealthCheckOptions{
+        Predicate = (_) => false // response from a ping 
+    }); 
+});
+
 
 app.MapControllers();
 
