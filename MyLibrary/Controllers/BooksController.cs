@@ -16,15 +16,15 @@ namespace MyLibrary.Controllers
         }
 
         [HttpGet] // Get /books
-        public IEnumerable<BookDTO> GetBooks(){
-            var books = repository.GetBooks().Select(book => book.AsDto());
+        public async Task<IEnumerable<BookDTO>> GetBooksAsync(){
+            var books = (await repository.GetBooksAsync()).Select(book => book.AsDto());
             return books;
         }
 
         // Get /book/{id}
         [HttpGet("{id}")]
-        public ActionResult<BookDTO> GetBook(Guid id){
-            var book = repository.GetBook(id);
+        public async Task <ActionResult<BookDTO>> GetBookAsync(Guid id){
+            var book = await repository.GetBookAsync(id);
             if (book is null){
                 return NotFound(); // You need to use ActionResult to return an item type
             }
@@ -32,7 +32,7 @@ namespace MyLibrary.Controllers
         }
 
         [HttpPost]
-        public ActionResult<BookDTO> CreateBook(CreateBookDTO bookDTO){
+        public async Task<ActionResult<BookDTO>> CreateBookAsync(CreateBookDTO bookDTO){
             Book book = new ()
             {
                 Id = Guid.NewGuid(),
@@ -41,13 +41,13 @@ namespace MyLibrary.Controllers
                 Rating = bookDTO.Rating,
                 CreatedDate = DateTimeOffset.UtcNow
             };
-            repository.CreateBook(book);
-            return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book.AsDto());
+            await repository.CreateBookAsync(book);
+            return CreatedAtAction(nameof(GetBookAsync), new { id = book.Id }, book.AsDto());
         }
 
         [HttpPut]
-        public ActionResult<BookDTO> UpdateBook(Guid id, UpdateBookDTO bookDTO){
-            var existingBook = repository.GetBook(id);
+        public async Task<ActionResult<BookDTO>> UpdateBookAsync(Guid id, UpdateBookDTO bookDTO){
+            var existingBook = await repository.GetBookAsync(id);
             if (existingBook is null){
                 return NotFound();
             }
@@ -56,18 +56,18 @@ namespace MyLibrary.Controllers
                 Author = bookDTO.Author,
                 Rating = bookDTO.Rating
             };
-            repository.UpdateBook(updatedBook);
+            await repository.UpdateBookAsync(updatedBook);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<BookDTO> DeleteBook(Guid id){
-            var existingBook = repository.GetBook(id);
+        public async Task<ActionResult<BookDTO>> DeleteBookAsync(Guid id){
+            var existingBook = await repository.GetBookAsync(id);
             
             if (existingBook is null){
                 return NotFound();
             }
-            repository.DeleteBook(existingBook);
+            await repository.DeleteBookAsync(existingBook);
             return NoContent();
         }
     }

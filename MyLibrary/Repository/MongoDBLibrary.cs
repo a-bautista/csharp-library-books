@@ -1,4 +1,5 @@
 
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MyLibrary.Entities;
 using MyLibrary.Repository;
@@ -8,36 +9,40 @@ namespace MyLibrary.Repositories {
         private const string databaseName = "Library";
         private const string collectionName = "Books";
         private readonly IMongoCollection<Book> booksCollection;
+        private readonly FilterDefinitionBuilder<Book> filterBuilder = Builders<Book>.Filter;
         public MongoDbItemsRepository(IMongoClient mongoClient)
         {
             IMongoDatabase database = mongoClient.GetDatabase(databaseName);
             booksCollection = database.GetCollection<Book>(collectionName);
         }
 
-        public void CreateBook(Book book)
+        public async Task CreateBookAsync(Book book)
         {
-            booksCollection.InsertOne(book);
+            await booksCollection.InsertOneAsync(book);
         }
 
-        public void DeleteBook(Book book)
+        public async Task DeleteBookAsync(Book book)
         
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(book => book.Id, book.Id);
+            await booksCollection.DeleteOneAsync(filter);
         }
 
-        public Book GetBook(Guid id)
+        public async Task<Book> GetBookAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(book => book.Id, id);
+            return await booksCollection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public void UpdateBook(Book book)
+        public async Task UpdateBookAsync(Book book)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(existingBook => existingBook.Id, book.Id);
+            await booksCollection.ReplaceOneAsync(filter, book);
         }
 
-        public IEnumerable<Book> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            throw new NotImplementedException();
+            return await booksCollection.Find(new BsonDocument()).ToListAsync();
         }
 
     }

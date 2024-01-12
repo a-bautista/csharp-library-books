@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IBookRepository, BookRepository>();
+//builder.Services.AddSingleton<IBookRepository, BookRepository>();
 
 BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String)); // necessary for mongodb id 
 BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String)); // necessary for created date mongo
@@ -26,7 +26,11 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
     var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
     return new MongoClient(settings.ConnectionString);
 });
-builder.Services.AddSingleton<IBookRepository, MongoDbItemsRepository>();
+builder.Services.AddSingleton<IBookRepository, MongoDbItemsRepository>(); // because of this, you are using the mongo db instead of the BookRepository
+builder.Services.AddControllers(options => 
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+}); // helps to solve the problem for async in GetItemasync
 
 var app = builder.Build();
 

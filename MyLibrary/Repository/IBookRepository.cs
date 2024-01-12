@@ -1,11 +1,12 @@
 using MyLibrary.Entities;
+using System.Threading.Tasks;
 
 namespace MyLibrary.Repository {
     public interface IBookRepository {
-        Book GetBook(Guid id);
-        IEnumerable<Book> GetBooks();
-        void CreateBook(Book book);
-        void UpdateBook(Book book);
-        void DeleteBook(Book book);
+        Task <Book> GetBookAsync(Guid id);
+        Task <IEnumerable<Book>> GetBooksAsync();
+        Task CreateBookAsync(Book book);
+        Task UpdateBookAsync(Book book);
+        Task DeleteBookAsync(Book book);
     }
 }
