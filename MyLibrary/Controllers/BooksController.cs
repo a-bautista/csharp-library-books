@@ -45,7 +45,7 @@ namespace MyLibrary.Controllers
             return CreatedAtAction(nameof(GetBookAsync), new { id = book.Id }, book.AsDto());
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult<BookDTO>> UpdateBookAsync(Guid id, UpdateBookDTO bookDTO){
             var existingBook = await repository.GetBookAsync(id);
             if (existingBook is null){
