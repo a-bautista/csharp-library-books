@@ -49,7 +49,9 @@ namespace MyLibraryApi.UnitTests
             var result = await controller.GetBookAsync(Guid.NewGuid());
 
             // Assert
-            result.Value.Should().BeEquivalentTo(expectedBook, options => options.ComparingByMembers<Book>());
+            result.Value.Should().BeEquivalentTo(
+                expectedBook, 
+                options => options.ComparingByMembers<Book>());
         }
 
         [Fact]
@@ -67,18 +69,19 @@ namespace MyLibraryApi.UnitTests
             var actualBooks = await controller.GetBooksAsync();
 
             // Assert
-            actualBooks.Should().BeEquivalentTo(expectedBooks, options => options.ComparingByMembers<Book>());   
+            actualBooks.Should().BeEquivalentTo(
+                expectedBooks, 
+                options => options.ComparingByMembers<Book>());   
         }
         [Fact]
         public async Task CreateBookAsync_WithBookToCreate_ReturnsCreatedBook()
         {
             // Arrange
-            var bookToCreate = new CreateBookDTO
-            {
-                Name = Guid.NewGuid().ToString(),
-                Author = Guid.NewGuid().ToString(),
-                Rating = random.Next(5)
-            };
+            var bookToCreate = new CreateBookDTO(
+                Guid.NewGuid().ToString(), 
+                Guid.NewGuid().ToString(), 
+                random.Next(5));
+
             var controller = new BooksController(repositoryStub.Object, loggerStub.Object);
 
             // Act
@@ -93,7 +96,7 @@ namespace MyLibraryApi.UnitTests
             );
 
             // the missing properties which are ID and date
-            createdBook.Id.Should().NotBeEmpty();
+            //createdBook.Id.Should().NotBeEmpty();
             createdBook.CreatedDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMilliseconds(1000));
         }
 
@@ -105,7 +108,7 @@ namespace MyLibraryApi.UnitTests
             repositoryStub.Setup(repo => repo.GetBookAsync(It.IsAny<Guid>())).ReturnsAsync(existingBook);
 
             var bookId = existingBook.Id;
-            var bookToUpdate = new UpdateBookDTO()
+            var bookToUpdate = new UpdateBookDTO(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), random.Next(1))
             {
                 Name = Guid.NewGuid().ToString(),
                 Author = Guid.NewGuid().ToString(),

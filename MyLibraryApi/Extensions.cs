@@ -6,14 +6,7 @@ namespace MyLibraryApi {
     {
         public static BookDTO AsDto(this Book book)
         {
-            return new BookDTO
-            {
-                Id = book.Id,
-                Name = book.Name,
-                Author = book.Author,
-                Rating = book.Rating,
-                CreatedDate = book.CreatedDate
-            };
+            return new BookDTO(book.Id, book.Name, book.Author, book.Rating, book.CreatedDate);
         }
     }
 }

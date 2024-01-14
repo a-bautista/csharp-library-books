@@ -1,11 +1,11 @@
 namespace MyLibraryApi.Entities
 {
-    public record Book
+    public class Book
     {
         public Guid Id { get; set; }
-        public string Name {get; init;}
-        public string Author {get; init;}
-        public decimal Rating {get; init;}
-        public DateTimeOffset CreatedDate {get; init;}
+        public string Name {get; set;}
+        public string Author {get; set;}
+        public decimal Rating {get; set;}
+        public DateTimeOffset CreatedDate {get; set;}
     }
 }

@@ -54,12 +54,12 @@ namespace MyLibraryApi.Controllers
             if (existingBook is null){
                 return NotFound();
             }
-            Book updatedBook = existingBook with {
-                Name = bookDTO.Name,
-                Author = bookDTO.Author,
-                Rating = bookDTO.Rating
-            };
-            await repository.UpdateBookAsync(updatedBook);
+
+            existingBook.Name = bookDTO.Name;
+            existingBook.Author = bookDTO.Author;
+            existingBook.Rating = bookDTO.Rating;
+
+            await repository.UpdateBookAsync(existingBook);
             return NoContent();
         }
 
