@@ -1,4 +1,4 @@
-namespace MyLibrary.DTO {
+namespace MyLibraryApi.DTO {
     public record BookDTO {
     public Guid Id { get; set; }
         public string Name {get; init;}

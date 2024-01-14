@@ -1,7 +1,7 @@
-using MyLibrary.Entities;
+using MyLibraryApi.Entities;
 using System.Threading.Tasks;
 
-namespace MyLibrary.Repository {
+namespace MyLibraryApi.Repository {
     public interface IBookRepository {
         Task <Book> GetBookAsync(Guid id);
         Task <IEnumerable<Book>> GetBooksAsync();

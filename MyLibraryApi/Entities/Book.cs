@@ -1,4 +1,4 @@
-namespace MyLibrary.Entities
+namespace MyLibraryApi.Entities
 {
     public record Book
     {

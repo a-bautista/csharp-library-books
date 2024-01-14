@@ -6,9 +6,9 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using MyLibrary.Repositories;
-using MyLibrary.Repository;
-using MyLibrary.Settings;
+using MyLibraryApi.Repositories;
+using MyLibraryApi.Repository;
+using MyLibraryApi.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,9 +1,9 @@
 
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MyLibrary.Entities;
-using MyLibrary.Repository;
-namespace MyLibrary.Repositories {
+using MyLibraryApi.Entities;
+using MyLibraryApi.Repository;
+namespace MyLibraryApi.Repositories {
     public class MongoDbItemsRepository: IBookRepository {
 
         private const string databaseName = "Library";

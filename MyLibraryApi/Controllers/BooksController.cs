@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using MyLibrary.DTO;
-using MyLibrary.Entities;
-using MyLibrary.Repository;
+using MyLibraryApi.DTO;
+using MyLibraryApi.Entities;
+using MyLibraryApi.Repository;
 
-namespace MyLibrary.Controllers
+namespace MyLibraryApi.Controllers
 {
     [ApiController]
     [Route("books")] // Get books

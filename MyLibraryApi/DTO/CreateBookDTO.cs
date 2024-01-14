@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MyLibrary.DTO {
+namespace MyLibraryApi.DTO {
     public record CreateBookDTO {
         [Required]
         public string Name {get; init;}

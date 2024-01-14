@@ -1,4 +1,4 @@
-namespace MyLibrary.Settings 
+namespace MyLibraryApi.Settings 
 {
     public class MongoDbSettings
     {

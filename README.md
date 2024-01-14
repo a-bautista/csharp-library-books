@@ -12,7 +12,7 @@
 
 - Create your docker image
 
-`docker build -t catalog:v1 . `
+`docker build -t mylibrary:v5 . `
 
 - mongodb needs to talk with the catalog container, so create a network for both
 
@@ -76,3 +76,11 @@ After you have pushed your image, you need to update the image in your catalog.y
 - Add a reference to the MYWEBAPI project from the UnitTests
 
 `dotnet add reference ../MYWEBAPI/mywebapi.csproj`
+
+- Add the Logging abstraction pkg in the unit tests
+
+`dotnet add package Microsoft.Extensions.Logging.Abstractions`
+
+- Add the moq pkg
+
+`dotnet add package moq`

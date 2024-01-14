@@ -1,7 +1,7 @@
-using MyLibrary.DTO;
-using MyLibrary.Entities;
+using MyLibraryApi.DTO;
+using MyLibraryApi.Entities;
 
-namespace MyLibrary {
+namespace MyLibraryApi {
     public static class Extensions // extensions are static
     {
         public static BookDTO AsDto(this Book book)
