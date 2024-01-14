@@ -21,10 +21,10 @@ namespace MyLibraryApi.UnitTests
         public async void GetBookAsync_WithUnexistingBook_ReturnsNotFound()
         {
             // Arrange
-            
+
             repositoryStub.Setup(repo => repo.GetBookAsync(It.IsAny<Guid>())).ReturnsAsync((Book)null);
 
-            
+
             var controller = new BooksController(repositoryStub.Object, loggerStub.Object);
 
             // Act
@@ -50,8 +50,8 @@ namespace MyLibraryApi.UnitTests
 
             // Assert
             result.Value.Should().BeEquivalentTo(
-                expectedBook, 
-                options => options.ComparingByMembers<Book>());
+                expectedBook
+                );
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace MyLibraryApi.UnitTests
         {
 
             // Arrange            
-            var expectedBooks = new[] {CreateRandomBook(), CreateRandomBook(), CreateRandomBook()};
+            var expectedBooks = new[] { CreateRandomBook(), CreateRandomBook(), CreateRandomBook() };
 
             repositoryStub.Setup(repo => repo.GetBooksAsync()).ReturnsAsync(expectedBooks);
 
@@ -70,16 +70,43 @@ namespace MyLibraryApi.UnitTests
 
             // Assert
             actualBooks.Should().BeEquivalentTo(
-                expectedBooks, 
-                options => options.ComparingByMembers<Book>());   
+                expectedBooks
+                );
         }
+
+        [Fact]
+        public async void GetBookAsync_WithMatchingBooks_ReturnsMatchingBooks()
+        {
+
+            // Arrange            
+            var allBooks = new[]
+                {
+                    new Book() { Author = "John Steinbeck"},
+                    new Book() { Author = "Eiji Yoshikawa"}
+                };
+
+            var nameToMatch = "Eiji";
+
+            repositoryStub.Setup(repo => repo.GetBooksAsync()).ReturnsAsync(allBooks);
+
+            var controller = new BooksController(repositoryStub.Object, loggerStub.Object);
+
+            // Act
+            IEnumerable<BookDTO> foundBooks = await controller.GetBooksAsync(nameToMatch);
+
+            // Assert
+            foundBooks.Should().OnlyContain(
+                book => book.Author == allBooks[0].Author || book.Author == allBooks[1].Author
+            );
+        }
+
         [Fact]
         public async Task CreateBookAsync_WithBookToCreate_ReturnsCreatedBook()
         {
             // Arrange
             var bookToCreate = new CreateBookDTO(
-                Guid.NewGuid().ToString(), 
-                Guid.NewGuid().ToString(), 
+                Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(),
                 random.Next(5));
 
             var controller = new BooksController(repositoryStub.Object, loggerStub.Object);
@@ -139,7 +166,7 @@ namespace MyLibraryApi.UnitTests
 
         private Book CreateRandomBook()
         {
-            return new ()
+            return new()
             {
                 Id = Guid.NewGuid(),
                 Name = Guid.NewGuid().ToString(),

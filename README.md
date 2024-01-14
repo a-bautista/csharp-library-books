@@ -30,7 +30,7 @@
 
 `docker run -it --rm -p 8085:80 -e MongoDbSettings:Host=mongodbmylibrary --network=mylibrary mylibrary:v2`
 
-`docker run -it --rm -p 8085:80 -e MongoDbSettings:Host=mongodbmylibrary -e MongoDbSettings:Port=27017 --network=mylibrary mylibrary:v3`
+`docker run -it --rm -p 8085:80 -e MongoDbSettings:Host=mongodbmylibrary -e MongoDbSettings:Port=27017 --network=mylibrary mylibrary:v5`
 
 I had to specifically use the port 27017 on the new API because that is the port from the container. 
 
@@ -90,3 +90,5 @@ After you have pushed your image, you need to update the image in your catalog.y
 - Add package for each assertion type
 
 `dotnet add package FluentAssertions`
+
+- 
