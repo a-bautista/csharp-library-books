@@ -10,14 +10,17 @@ namespace MyLibraryApi.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository repository; 
+        private readonly ILogger<BooksController> logger;
 
-        public BooksController(IBookRepository repository) { // this class depends on the interface (dependency injection)
+        public BooksController(IBookRepository repository, ILogger<BooksController> logger) { // this class depends on the interface (dependency injection)
             this.repository = repository;
+            this.logger = logger;
         }
 
         [HttpGet] // Get /books
         public async Task<IEnumerable<BookDTO>> GetBooksAsync(){
             var books = (await repository.GetBooksAsync()).Select(book => book.AsDto());
+            logger.LogInformation($"{DateTime.UtcNow:hh:mm:ss}: Retrieved {books.Count()} books");
             return books;
         }
 

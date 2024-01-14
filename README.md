@@ -84,3 +84,9 @@ After you have pushed your image, you need to update the image in your catalog.y
 - Add the moq pkg
 
 `dotnet add package moq`
+
+- unit test naming convention UnitOfWork_StateUnderTest_ExpectedBehavior()
+
+- Add package for each assertion type
+
+`dotnet add package FluentAssertions`
